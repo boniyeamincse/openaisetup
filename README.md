@@ -2,10 +2,24 @@
 
 ![Akij Group](https://github.com/boniyeamincse/openaisetup/blob/main/image/boni%20Yemain.png)
 
-## Author: Boni Yeamin
-## Date: 2022-02-28
-## Version: 1.0
-## Description: This script will install Open AI on Ubuntu server.
+## Table of Contents
+1. [Overview](#overview)
+2. [Prerequisites](#prerequisites)
+3. [Install Docker](#install-docker)
+4. [Docker Compose Configuration](#docker-compose-configuration)
+5. [Create Docker Volume](#create-docker-volume)
+6. [Install Ollama](#install-ollama)
+7. [Install Open Web-UI](#install-open-web-ui)
+8. [Install Nginx](#install-nginx)
+9. [Set Hostname](#set-hostname)
+
+## Overview
+
+| **Author**       | Boni Yeamin          |
+|------------------|----------------------|
+| **Date**         | 2022-02-28           |
+| **Version**      | 1.0                  |
+| **Description**  | This script will install Open AI on Ubuntu server. |
 
 ## Prerequisites
 - Root access to the Ubuntu server.
