@@ -12,6 +12,7 @@
 7. [Install Open Web-UI](#install-open-web-ui)
 8. [Install Nginx](#install-nginx)
 9. [Set Hostname](#set-hostname)
+10. [Setup SSL](#setup-ssl)
 
 ## Overview
 
@@ -171,6 +172,33 @@ $ docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui g
     ```
 
 4. **Restart the server and test the web interface at [http://ai.akijgroup.co](http://ai.akijgroup.co)**
+
+## Setup SSL
+
+1. **Install Certbot:**
+    ```sh
+    $ sudo apt update
+    $ sudo apt install certbot python3-certbot-nginx
+    ```
+
+2. **Obtain an SSL Certificate:**
+    ```sh
+    $ sudo certbot --nginx -d ai.akijgroup.co
+    ```
+
+3. **Follow the instructions to complete the SSL certificate installation.**
+
+4. **Verify the SSL Certificate:**
+    ```sh
+    $ sudo certbot certificates
+    ```
+
+5. **Test SSL Certificate Renewal:**
+    ```sh
+    $ sudo certbot renew --dry-run
+    ```
+
+6. **Access the secure web interface at [https://ai.akijgroup.co](https://ai.akijgroup.co)**
 
 ---
 
