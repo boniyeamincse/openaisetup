@@ -1,89 +1,174 @@
-# Open AI setup for AKij group 
-#Author: Boni Yeamin
-#Date: 2022-02-28
-#Version: 1.0
-#Description: This script will install Open AI on Ubuntu server
+# Open AI Setup for Akij Group
 
-# install dependencies
- Root access
+![Akij Group](https://github.com/boniyeamincse/openaisetup/blob/main/image/boni%20Yemain.png)
 
-# Install Docker for Ubuntu
+## Author: Boni Yeamin
+## Date: 2022-02-28
+## Version: 1.0
+## Description: This script will install Open AI on Ubuntu server.
+
+## Prerequisites
+- Root access to the Ubuntu server.
+
+## Install Docker on Ubuntu Server
 
 Follow these steps to install Docker on an Ubuntu system:
 
-
-# install docker on ubontu server
+```sh
 $ sudo apt update
 $ sudo apt install docker.io
 $ sudo systemctl start docker
 $ sudo systemctl enable docker
+```
 
+## Docker Compose Configuration
 
+Create a `docker-compose.yml` file with the following content:
 
-# Create Docker Volume for ollama_data
+```yaml
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: always
+
+  openwebui:
+    image: openwebui/openwebui
+    container_name: openwebui
+    ports:
+      - "8080:8080"
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - openwebui
+    restart: always
+
+volumes:
+  ollama_data:
+```
+
+## Create Docker Volume for `ollama_data`
 
 1. **Create a Docker volume for storing the data:**
+    ```sh
     $ docker volume create ollama_data
+    ```
 
 2. **Verify that the volume was created successfully:**
+    ```sh
     $ docker volume ls
+    ```
 
 3. **Check the status of the volume:**
+    ```sh
     $ docker volume inspect ollama_data
+    ```
 
 4. **Start the container and mount the volume:**
-
+    ```sh
     $ docker run -d -v ollama_data:/root/.ollama -p 11434:11434 --name ollama ollama/ollama:latest
-    
+    ```
+
 5. **Check the status of the container:**
+    ```sh
     $ docker ps -a
+    ```
 
-5. **Access the container's web interface at http://localhost:11434**
+6. **Access the container's web interface at [http://localhost:11434](http://localhost:11434)**
 
-# install ollama on ollama Images
-$ docker exce ollama ollama run gemma3:4b
+## Install Ollama on Ollama Images
 
-# show ollama run gemma3:4b
-$ docker exece ollama ollama ps 
+```sh
+$ docker exec ollama ollama run gemma3:4b
+```
 
-# install open web-UI  image
+## Show Ollama Running Gemma3:4b
+
+```sh
+$ docker exec ollama ollama ps
+```
+
+## Install Open Web-UI Image
+
+```sh
 $ docker pull ghcr.io/open-webui/open-webui:main
+```
 
-# Run the Image 
-docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+## Run the Image
 
+```sh
+$ docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+```
 
-# Access the web interface at http://localhost:3000
+## Access the Web Interface at [http://localhost:3000](http://localhost:3000)
 
+## Install Nginx on Ubuntu Server and Configure Hostname
 
-# install nginx on Ubontu server and config hostname willbe ai.akijgroup.co
-$ sudo apt update
-$ sudo apt install nginx
-$ sudo nano /etc/nginx/sites-available/default
+1. **Install Nginx:**
+    ```sh
+    $ sudo apt update
+    $ sudo apt install nginx
+    ```
 
-# add the following lines to the server block:
-server {
-    listen 80;
-    server_name ai.akijgroup.co;
+2. **Edit the Nginx Configuration File:**
+    ```sh
+    $ sudo nano /etc/nginx/sites-available/default
+    ```
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+3. **Add the following lines to the server block:**
+
+    ```nginx
+    server {
+        listen 80;
+        server_name ai.akijgroup.co;
+
+        location / {
+            proxy_pass http://localhost:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
     }
-}
+    ```
 
-# save and exit the file, then restart nginx:
+4. **Save and exit the file, then restart Nginx:**
+    ```sh
+    $ sudo systemctl restart nginx
+    ```
 
-# hostname setup ubontu 
-$ sudo hostnamectl set-hostname ai.akijgroup.co
+## Set Hostname on Ubuntu
 
-# add the hostname to /etc/hosts file
-$ sudo nano /etc/hosts
-# add the following line to the file:
-127.0.0.1   ai.akijgroup.co     
+1. **Set the hostname:**
+    ```sh
+    $ sudo hostnamectl set-hostname ai.akijgroup.co
+    ```
 
-# restart the server and test the web interface at http://ai.akijgroup.co
+2. **Add the hostname to `/etc/hosts` file:**
+    ```sh
+    $ sudo nano /etc/hosts
+    ```
 
+3. **Add the following line to the file:**
+    ```plaintext
+    127.0.0.1   ai.akijgroup.co
+    ```
+
+4. **Restart the server and test the web interface at [http://ai.akijgroup.co](http://ai.akijgroup.co)**
+
+---
+
+This setup guide provides the necessary steps to install and configure Open AI on an Ubuntu server for Akij Group. Follow these instructions carefully to ensure a smooth setup process.
