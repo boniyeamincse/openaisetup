@@ -59,17 +59,6 @@ services:
       - "8080:8080"
     restart: always
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - openwebui
-    restart: always
-
 volumes:
   ollama_data:
 ```
